@@ -1,0 +1,59 @@
+import numpy as np
+import pandas as pd
+import matplotlib
+from matplotlib import pyplot as plt
+from datetime import datetime
+
+fig, (ax1, ax2, ax5, ax4, ax3) = plt.subplots(nrows=5,ncols=1,sharex=False)
+t = pd.date_range("2010-01","2020-08", freq="MS").strftime("%m-%y")
+ticks = pd.date_range("2010-01","2020-08", freq="AS-JAN").strftime("%m-%y")
+labels = pd.date_range("2010-01","2020-08", freq="AS-JAN").strftime("%Y")
+
+ul = pd.read_csv("ul_vector.csv",index_col='dates').dropna().set_index(t)
+ax1.plot(ul, color="blue", linestyle="-", marker='', linewidth=3, label="Unemployment Level")
+ax1.set_title("Unemployment Levels")
+ax1.set_xlabel("Year (Beginning January)")
+ax1.set_ylabel("Number Unemployed (Thousands)")
+ax1.set_xticks(ticks)
+ax1.set_xticklabels(labels, fontsize=15)
+ax1.tick_params(axis='y', labelsize=15)
+
+
+max_ur = [9.9,9.1,8.3,8,6.7,5.7,5,4.7,4.1,4,14.7]
+ax2.bar(x=labels, height=max_ur, color="black", label="Maximum Unemployment Rate by Year")
+ax2.set_title("Maximum Unemployment Rate by Year")
+ax2.set_xlabel("Year (Beginning January)")
+ax2.set_ylabel("Unemployment Rate Maxima")
+ax2.tick_params(axis='y', labelsize=15)
+ax2.tick_params(axis='x', labelsize=15)
+
+
+slices = [10.4, 12.7, 8.6]
+colors = ['orange','blue','green']
+labels = ['Asian','Black','White']
+ax3.pie(slices, labels=labels, textprops={'fontsize': 18}, autopct='%1.1f%%')
+ax3.set_title("Percentage of Unemployed by Race")
+
+
+black_ur = [6,5.8,6.7,16.7,16.8,15.4,14.6,13]
+white_ur = [3.1,3.1,4,14.2,12.4,10.1,9.2,7.3]
+ax4.scatter(black_ur,white_ur,marker="o", edgecolor="black", linewidth=3, alpha=.5)
+ax4.set_title("Relationship between Black and White Unemployment Rates (2020)")
+ax4.set_xlabel("Monthly Unemployment Rate (Black)")
+ax4.set_ylabel("Monthly Unemployment Rate (White)")
+ax4.tick_params(axis='y', labelsize=15)
+ax4.tick_params(axis='x', labelsize=15)
+
+ul_freq=[15046,15113,15202,15325,14849,14474,14512,14648,14579,14516,15081,14348,14013,13820,13737,13957,13855,13962,13763,13818,13948,13594,13302,13093,12797,12813,12713,12646,12660,12692,12656,12471,12115,12124,12005,12298,12471,11950,11689,11760,11654,11751,11335,11279,11270,11136,10787,10404,10202,10349,10380,9702,9859,9460,9608,9599,9262,8990,9090,8717,8885,8599,8515,8550,8834,8247,8167,7992,7907,7922,8000,7907,7721,7746,7945,7975,7668,7786,7658,7809,7967,7827,7488,7495,7518,7399,7088,7085,7059,6933,6867,7097,6841,6599,6697,6561,6582,6641,6493,6418,6209,6519,6180,6167,6045,6123,6034,6286,6516,6181,6194,5850,5938,5985,6027,5999,5753,5857,5811,5753,5892,5787,7140,23078,20985,17750,16338,13550]
+ax5.hist(ul_freq, edgecolor="black")
+ax5.set_title("Frequency Distribution of Monthly Unemployment Levels")
+ax5.set_ylabel("Frequency")
+ax5.set_xlabel("Unemployment Levels (Thousands)")
+ax5.tick_params(axis='y', labelsize=15)
+ax5.tick_params(axis='x', labelsize=15)
+
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5, 30.5)
+fig.tight_layout(pad=3.0)
+plt.style.use('fivethirtyeight')
+plt.show()
